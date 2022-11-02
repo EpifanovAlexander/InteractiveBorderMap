@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="gridMap" style="padding: 0px 20px;">
+    <div style="background-color: rgb(58, 65, 69); margin-right: 20px;">
+        <div style="margin: 20px;">
+
+            <p style="text-align: center; font-size: 12pt; color: white;">
+                Нажмите кнопку полигона <img src="/img/pentagon.png" width="20" height="20" alt="пентагон">, выделите нужную область и запустите расчёт
+            </p>
+
+            <form method="post" action="home/calculate" id="SubmitForm">
+                <button value="Submit" class="btn btn-primary btn-lg btn-block"
+                        style="background-color: #525864; border: lightslategrey; box-shadow: 0px 1px 3px rgba(000, 000, 000, 1);
+               width: 100%;">
+                    Рассчитать
+                </button>
+            </form>
+
+        </div>
+
+        <p id="result" style="text-align: center; font-size: 12pt; color: white;">
+        </p>
+
+    </div>
+    <div id="map"></div>
+</div>
+
+
+<script type="text/javascript" src="/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/js/InteractiveMap.js"></script>

@@ -1,0 +1,52 @@
+/* Container holding the image and the text */
+.containerImg {
+    position: relative;
+    text-align: center;
+    color: white;
+    margin-right: 0px;
+    margin-left:  0px;
+    height: 100%;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.imgTopMain
+{
+    filter: brightness(40%);
+    height: 500px;
+    width:  100%;
+}
+.grid { 
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns:  1fr;
+    grid-gap: 2vw;
+
+    font-size: 5vw;
+    text-align: center;
+}
+.enterText{
+    background: #a9a9a9; /* Цвет фона */
+    color: rgb(0, 0, 0); /* Цвет текста */
+    padding: 10px; /* Поля вокруг текста */
+    border-radius: 5px; /* Уголки */
+    font-size: 20px; 
+
+    margin:20px;
+}
+.gridMap {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 4fr;
+    height: 900px;
+}
+
+.gridMap div {
+    border-radius: 15px;
+}
