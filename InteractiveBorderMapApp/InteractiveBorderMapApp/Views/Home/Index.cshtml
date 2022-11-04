@@ -6,25 +6,31 @@
     <div style="background-color: rgb(58, 65, 69); margin-right: 20px;">
         <div style="margin: 20px;">
 
-            <p style="text-align: center; font-size: 12pt; color: white;">
-                Нажмите кнопку полигона <img src="/img/pentagon.png" width="20" height="20" alt="пентагон">, выделите нужную область и запустите расчёт
+            <p style="text-align: center; font-size: 10pt; color: white;">
+                Нажмите кнопку полигона <img src="/img/pentagon.png" width="20" height="20" alt="пентагон">, выделите нужную область и запустите расчёт границ
             </p>
 
-            <form method="post" action="home/calculate" id="SubmitForm">
-                <button value="Submit" class="btn btn-primary btn-lg btn-block"
+            <form method="post" action="home/calculate" id="submitForm">
+                <button value="Submit" class="btn btn-primary btn-lg btn-block" id="calculateBtn"
                         style="background-color: #525864; border: lightslategrey; box-shadow: 0px 1px 3px rgba(000, 000, 000, 1);
-               width: 100%;">
-                    Рассчитать
+                        width: 100%; font-size: 10pt">
+                    <img id="loader" src="/img/loading.gif" width="20" height="20" alt="Загрузка" style="display: none; margin-right: 10px;">
+                    Сформировать границу
                 </button>
             </form>
 
         </div>
 
-        <p id="result" style="text-align: center; font-size: 12pt; color: white;">
-        </p>
+        <p id="result" style="text-align: center; font-size: 12pt; color: white;"> </p>
 
     </div>
     <div id="map"></div>
+
+
+    <div id='error_box' style='display: none; border: 1px solid #f7c7c9; background: #f9e5e6; position: fixed; width: 370px; right: 20px; top: 20px; -webkit-box-shadow: 0px 5px 5px 3px rgba(0, 0, 0, 0.3); box-shadow: 0px 5px 5px 3px rgba(0, 0, 0, 0.3); -webkit-border-radius: 5px; border-radius: 5px; text-align: center;'>
+        <p id='error_message' style='color: #c77c7e; margin-top: 18px; font-weight: bold;  text-shadow: 1px 1px 1px #FFFFFF;'></p>
+    </div>
+
 </div>
 
 
