@@ -1,0 +1,3 @@
+
+A
+GISDataParser.sln,3\1\317bb1255c24996f80cf7bd5db8371fa87834161

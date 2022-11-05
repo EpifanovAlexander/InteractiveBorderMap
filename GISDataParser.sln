@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GISDataParser", "GISDataParser\GISDataParser.csproj", "{7EA9D4AC-238A-4CA9-9AA5-EE2A67C35448}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTopologySuite.IO.Esri.Shapefile", "NetTopologySuite.IO.Esri.Shapefile\NetTopologySuite.IO.Esri.Shapefile.csproj", "{091290C0-695D-4BCF-9D0D-6959DFC0ABE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EA9D4AC-238A-4CA9-9AA5-EE2A67C35448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EA9D4AC-238A-4CA9-9AA5-EE2A67C35448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EA9D4AC-238A-4CA9-9AA5-EE2A67C35448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EA9D4AC-238A-4CA9-9AA5-EE2A67C35448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{091290C0-695D-4BCF-9D0D-6959DFC0ABE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{091290C0-695D-4BCF-9D0D-6959DFC0ABE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{091290C0-695D-4BCF-9D0D-6959DFC0ABE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{091290C0-695D-4BCF-9D0D-6959DFC0ABE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
