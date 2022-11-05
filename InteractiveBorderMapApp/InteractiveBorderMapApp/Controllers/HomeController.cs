@@ -1,26 +1,25 @@
-﻿using InteractiveBorderMapApp.Entities;
-using InteractiveBorderMapApp.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using InteractiveBorderMapApp.Entities;
+using InteractiveBorderMapApp.Models;
+using InteractiveBorderMapApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InteractiveBorderMapApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private CoordinateService _coordinateService;
+        private CriteriaService _criteriaService;
+        
+        public HomeController(CoordinateService coordinateService, CriteriaService criteriaService)
         {
-            _logger = logger;
+            _coordinateService = coordinateService;
+            _criteriaService = criteriaService;
         }
 
         public IActionResult Index()
@@ -35,12 +34,24 @@ namespace InteractiveBorderMapApp.Controllers
             var content = reader.ReadToEnd();
             var coordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
 
+
+            IEnumerable<Building> list = _coordinateService.getBuildingsAsync(coordinates).Result;
+
+
             // Новые координаты
             var newCoordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
-            newCoordinates.AsParallel().ForAll(i => { i.Lat += 0.001; i.Lng -= 0.006; });
+            newCoordinates.AsParallel().ForAll(i =>
+            {
+                i.Lat += 0.001;
+                i.Lng -= 0.006;
+            });
             var objects = new List<IEnumerable<Coordinate>>();
             objects.Add(newCoordinates);
-            coordinates.AsParallel().ForAll(i => { i.Lat += 0.004; i.Lng += 0.003; });
+            coordinates.AsParallel().ForAll(i =>
+            {
+                i.Lat += 0.004;
+                i.Lng += 0.003;
+            });
             objects.Add(coordinates);
             var newContent = JsonSerializer.Serialize(objects);
             return newContent;
