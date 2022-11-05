@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Dataset" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 

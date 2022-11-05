@@ -32,9 +32,9 @@ namespace InteractiveBorderMapApp.Services
             var minLng = area.Min(x => x.Lng);
 
             var client = _clientFactory.CreateClient();
-            var request = OSM_URL + "api/0.6/map?bbox=" + minLng.ToString("G", CultureInfo.InvariantCulture) + 
-            minLat.ToString("G", CultureInfo.InvariantCulture) + 
-            maxLng.ToString("G", CultureInfo.InvariantCulture) + 
+            var request = OSM_URL + "api/0.6/map?bbox=" + minLng.ToString("G", CultureInfo.InvariantCulture) + "," +
+            minLat.ToString("G", CultureInfo.InvariantCulture) + "," +
+            maxLng.ToString("G", CultureInfo.InvariantCulture) + "," +
             maxLat.ToString("G", CultureInfo.InvariantCulture);
             var message = await client.GetAsync(request);
             
