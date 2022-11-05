@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace InteractiveBorderMapApp.Services
     public class CoordinateService
     {
         private const string OSM_URL = "https://api.openstreetmap.org/";
+        private HashSet<string> VALID_TYPES = new HashSet<string>() {"apartments", "barracks", "bungalow", "cabin", 
+            "detached", "dormitory", "farm", "ger", "hotel", "house", "houseboat", "residential", "semidetached_house",
+            "static_caravan", "stilt_house", "terrace", "tree_house", "", "", ""};
         private IHttpClientFactory _clientFactory;
 
         public CoordinateService(IHttpClientFactory clientFactory)
@@ -22,27 +26,19 @@ namespace InteractiveBorderMapApp.Services
         {
             var list = new List<OsmBuilding>();
 
-            var center = new Coordinate();
-            var count = area.Count();
-            center.Lat = area.Sum(x => x.Lat) / count;
-            center.Lng = area.Sum(x => x.Lng) / count;
-            var radius = 0d;
-            
-            foreach (var coordinate in area)
-            {
-                var catet1 = Math.Abs(center.Lat - coordinate.Lat);
-                var catet2 = Math.Abs(center.Lng - coordinate.Lng);
-                var distance = Math.Sqrt(catet1 * catet1 + catet2 * catet2);
-                if (distance > radius) radius = distance;
-            }
+            var maxLat = area.Max(x => x.Lat);
+            var maxLng = area.Max(x => x.Lng);
+            var minLat = area.Min(x => x.Lat);
+            var minLng = area.Min(x => x.Lng);
 
             var client = _clientFactory.CreateClient();
-            var request = OSM_URL + "api/0.6/map?bbox=" + (center.Lng - radius) + 
-            (center.Lat - radius) + (center.Lng + radius) + (center.Lat + radius);
+            var request = OSM_URL + "api/0.6/map?bbox=" + minLng.ToString("G", CultureInfo.InvariantCulture) + 
+            minLat.ToString("G", CultureInfo.InvariantCulture) + 
+            maxLng.ToString("G", CultureInfo.InvariantCulture) + 
+            maxLat.ToString("G", CultureInfo.InvariantCulture);
             var message = await client.GetAsync(request);
             
-            Console.Write(message.Content);
-            //Get buildings info from message
+            
             
             return new List<OsmBuilding>();
         }

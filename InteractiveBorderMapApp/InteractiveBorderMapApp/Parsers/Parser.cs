@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using InteractiveBorderMapApp.Entities;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.IO.Esri.Dbf;
 using OfficeOpenXml;
-using LicenseContext = System.ComponentModel.LicenseContext;
 
 namespace InteractiveBorderMapApp
 {

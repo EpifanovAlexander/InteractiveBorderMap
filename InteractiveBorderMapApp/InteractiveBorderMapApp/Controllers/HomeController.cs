@@ -35,10 +35,10 @@ namespace InteractiveBorderMapApp.Controllers
         }
 
         [HttpPost]
-        public string Calculate()
+        public async Task<string> Calculate()
         {
             using var reader = new StreamReader(Request.Body);
-            var content = reader.ReadToEnd();
+            var content = await reader.ReadToEndAsync();
             var coordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
 
             
