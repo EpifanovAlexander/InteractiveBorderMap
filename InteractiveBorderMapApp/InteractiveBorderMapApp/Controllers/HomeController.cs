@@ -45,7 +45,7 @@ namespace InteractiveBorderMapApp.Controllers
             
             
             
-            IEnumerable<Building> list = _coordinateService.getBuildingsAsync(coordinates).Result;
+            IEnumerable<OsmBuilding> list = _coordinateService.getBuildingsAsync(coordinates).Result;
             
             // Если выводим через полигоны
             //var newCoordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);

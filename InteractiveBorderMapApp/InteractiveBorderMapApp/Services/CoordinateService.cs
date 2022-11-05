@@ -18,9 +18,9 @@ namespace InteractiveBorderMapApp.Services
         }
         
         
-        public async Task<IEnumerable<Building>> getBuildingsAsync(IEnumerable<Coordinate> area)
+        public async Task<IEnumerable<OsmBuilding>> getBuildingsAsync(IEnumerable<Coordinate> area)
         {
-            var list = new List<Building>();
+            var list = new List<OsmBuilding>();
 
             var center = new Coordinate();
             var count = area.Count();
@@ -44,7 +44,7 @@ namespace InteractiveBorderMapApp.Services
             Console.Write(message.Content);
             //Get buildings info from message
             
-            return new List<Building>();
+            return new List<OsmBuilding>();
         }
     }
 }
