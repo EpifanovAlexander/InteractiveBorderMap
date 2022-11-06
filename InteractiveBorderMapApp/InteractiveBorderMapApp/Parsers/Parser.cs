@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using NetTopologySuite.Geometries;
+using InteractiveBorderMapApp.Entities;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.IO.Esri.Dbf;
 using OfficeOpenXml;
+using Coordinate = NetTopologySuite.Geometries.Coordinate;
 
 namespace InteractiveBorderMapApp
 {
     public class Parser
     {
-        public static void ParseShp(string shpPath)
+        public static List<OsmBuilding> ParseShp(string shpPath)
         {
+            var list = new List<OsmBuilding>();
             foreach (var feature in Shapefile.ReadAllFeatures(shpPath))
             {
+                var building = new OsmBuilding();
                 foreach (var attrName in feature.Attributes.GetNames())
-                    Console.WriteLine($"{attrName,10}: {feature.Attributes[attrName]}");
-                Console.WriteLine($"     SHAPE:");
+                    building.Content += attrName;
+                //     Console.WriteLine($"{attrName,10}: {feature.Attributes[attrName]}");
+                // Console.WriteLine($"     SHAPE:");
 
                 foreach (var geometry in feature.Geometry.Coordinates)
                 {
-                    Console.Write(ReprojectFromMsk77(geometry)[1] + " " + ReprojectFromMsk77(geometry)[0]);
+                    building.Coordinate.Lat = ReprojectFromMsk77(geometry)[1];
+                    building.Coordinate.Lng = ReprojectFromMsk77(geometry)[0];
                 }
-
-
-                Console.WriteLine();
+                list.Add(building);
             }
+
+            return list;
         }
+
 
         public static void ParseDbf(string dbfPath)
         {

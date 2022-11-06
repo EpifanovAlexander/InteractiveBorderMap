@@ -16,5 +16,12 @@ namespace InteractiveBorderMapApp.Entities
         public Marker()
         {
         }
+
+        public Marker(Coordinate coordinate, string markerType, string text)
+        {
+            Coordinate = coordinate;
+            MarkerType = markerType;
+            Text = text;
+        }
     }
 }

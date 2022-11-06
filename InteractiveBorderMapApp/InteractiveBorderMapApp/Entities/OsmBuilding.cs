@@ -2,8 +2,12 @@
 {
     public class OsmBuilding
     {
-        private Coordinate _coordinate { get; set; }
-        private string _content { get; set; }
+        public Coordinate Coordinate { get; set; }
+        public string Content { get; set; }
 
+        public OsmBuilding()
+        {
+            Coordinate = new Coordinate();
+        }
     }
 }
