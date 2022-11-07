@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InteractiveBorderMapApp.Services;
 
 namespace InteractiveBorderMapApp
 {
@@ -24,6 +25,10 @@ namespace InteractiveBorderMapApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpClient();
+            services.AddScoped<Parser>();
+            services.AddScoped<CoordinateService>();
+            services.AddScoped<CriteriaService>();
 
             services.Configure<IISServerOptions>(options =>
             {

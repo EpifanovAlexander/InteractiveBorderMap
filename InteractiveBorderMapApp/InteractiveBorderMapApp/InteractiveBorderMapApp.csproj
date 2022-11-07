@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Dataset" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
@@ -14,6 +15,19 @@
     <None Include="wwwroot\img\tg.png" />
     <None Include="wwwroot\img\vk.png" />
     <None Include="wwwroot\js\InteractiveMap.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
+    <PackageReference Include="EPPlus" Version="6.1.0" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+    <PackageReference Include="NetTopologySuite.Features" Version="2.1.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0-rc.2.22472.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetTopologySuite.IO.Esri.Shapefile\NetTopologySuite.IO.Esri.Shapefile.csproj" />
   </ItemGroup>
 
 </Project>
