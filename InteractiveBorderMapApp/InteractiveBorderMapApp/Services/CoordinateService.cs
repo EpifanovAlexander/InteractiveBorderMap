@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InteractiveBorderMapApp.CustomExceptions;
 using InteractiveBorderMapApp.Entities;
 
 namespace InteractiveBorderMapApp.Services
@@ -12,43 +13,69 @@ namespace InteractiveBorderMapApp.Services
     public class CoordinateService
     {
         private const string OSM_URL = "https://api.openstreetmap.org/";
-        private HashSet<string> VALID_TYPES = new HashSet<string>() {"apartments", "barracks", "bungalow", "cabin", 
-            "detached", "dormitory", "farm", "ger", "hotel", "house", "houseboat", "residential", "semidetached_house",
-            "static_caravan", "stilt_house", "terrace", "tree_house", "commercial", "industrial", "kiosk", "office", 
-            "retail", "supermarket", "warehouse"};
         private string _dbfPath = @"InteractiveBorderMapApp\Dataset\Организации СВАО_САО\Организации_СВАО_САО.dbf";
         private string _shpPath = @"Dataset\Организации СВАО_САО\Организации_СВАО_САО.shp";
         private string _excelPath = @"InteractiveBorderMapApp\Dataset\Здания СВАО_САО жилое_нежилое.xlsx";
-        private string _excelAreaPath = 
+
+        private string _excelAreaPath =
             @"InteractiveBorderMapApp\Dataset\Аварийные_Самовольные_Несоответствие_ВРИ_СВАО_САО.XLSX";
+
         private IHttpClientFactory _clientFactory;
 
         public CoordinateService(IHttpClientFactory clientFactory, Parser parser)
         {
             _clientFactory = clientFactory;
         }
-        
-        
+
+
         public async Task<IEnumerable<OsmBuilding>> getBuildingsAsync(IEnumerable<Coordinate> area)
         {
-            var list = new List<OsmBuilding>();
+            //Проверка размера области 
+            var list = area.ToList();
+            if (CalcSquare(list) > 0.002d)
+            {
+                throw new ArgumentException("Square too big");
+            }
 
-            var maxLat = area.Max(x => x.Lat);
-            var maxLng = area.Max(x => x.Lng);
-            var minLat = area.Min(x => x.Lat);
-            var minLng = area.Min(x => x.Lng);
+            var buildingsList = Parser.ParseShp(Path.GetFullPath(_shpPath)); //Получение зданий и участков
 
-            var client = _clientFactory.CreateClient();
-            var request = OSM_URL + "api/0.6/map?bbox=" + minLng.ToString("G", CultureInfo.InvariantCulture) + "," +
-            minLat.ToString("G", CultureInfo.InvariantCulture) + "," +
-            maxLng.ToString("G", CultureInfo.InvariantCulture) + "," +
-            maxLat.ToString("G", CultureInfo.InvariantCulture);
-            //var message = await client.GetAsync(request);
-            
-            var buildingsList = Parser.ParseShp(Path.GetFullPath(_shpPath));
-            //Of course we now, that this is not correct solution. But we haven't enough time to do this correct 
-            return buildingsList.Where(x => maxLat > x.Coordinate.Lat && minLat < x.Coordinate.Lat &&
-                                            maxLng > x.Coordinate.Lng && x.Coordinate.Lng > minLng);
+            return buildingsList.Where(x => isInArea(list, x.Coordinate));
+        }
+
+        private bool isInArea(List<Coordinate> list, Coordinate dot)
+        {
+            var result = false;
+            int j = list.Count() - 1;
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (list[i].Lat < dot.Lat && list[j].Lat >= dot.Lat || list[j].Lat < dot.Lat && list[i].Lat >= dot.Lat)
+                {
+                    if (list[i].Lng + (dot.Lat - list[i].Lat) / (list[j].Lat - list[i].Lat) *
+                        (list[j].Lng - list[i].Lng) < dot.Lng)
+                    {
+                        result = !result;
+                    }
+                }
+
+                j = i;
+            }
+
+            return result;
+        }
+
+        private double CalcSquare(List<Coordinate> area)
+        {
+            var sum1 = 0d;
+            var sum2 = 0d;
+            for (int i = 0; i < area.Count - 1; i++)
+            {
+                sum1 += area[i].Lat * area[i + 1].Lng;
+                sum2 += area[i + 1].Lat * area[i].Lng;
+            }
+
+            var square = sum1 + area[area.Count - 1].Lat * area[0].Lng - sum2 -
+                         area[0].Lat * area[area.Count - 1].Lng;
+            return Math.Abs(square) / 2;
         }
     }
 }
