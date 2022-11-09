@@ -1,14 +1,6 @@
-﻿using InteractiveBorderMapApp.Entities;
-using InteractiveBorderMapApp.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using InteractiveBorderMapApp.Entities;
@@ -22,7 +14,7 @@ namespace InteractiveBorderMapApp.Controllers
     {
         private CoordinateService _coordinateService;
         private CriteriaService _criteriaService;
-        
+
         public HomeController(CoordinateService coordinateService, CriteriaService criteriaService)
         {
             _coordinateService = coordinateService;
@@ -42,12 +34,13 @@ namespace InteractiveBorderMapApp.Controllers
             var coordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
 
             IEnumerable<OsmBuilding> list = _coordinateService.getBuildingsAsync(coordinates).Result;
-            
+
             var markers = new List<Marker>();
-            foreach (var building in list) 
+            foreach (var building in list)
             {
                 markers.Add(new Marker(building.Coordinate, MarkerType.INCLUDE, building.Content));
             }
+
             var newContent = JsonSerializer.Serialize(markers);
             return newContent;
         }
