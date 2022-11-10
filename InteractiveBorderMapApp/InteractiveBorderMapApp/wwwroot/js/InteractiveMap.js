@@ -146,17 +146,32 @@ function drawObjectsFromPolygons(data, status) {
     });
 };
 
-function drawObjectsFromMarkers(data, status) {
-    $("#calculateBtn").prop('disabled', false);
-    $('#loader').hide();
-    var markers = JSON.parse(data);
-    markers.forEach(marker => {
-        newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
-    });
-};
+    function drawObjectsFromMarkers(data, status) {
+        $("#calculateBtn").prop('disabled', false);
+        $('#loader').hide();
+        var markers = JSON.parse(data);
+        if (markers.length === 0) {
+            $('#error_message').html("Нет данных о выделенной области");
+            $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
+        } else {
+            markers.forEach(marker => {
+                newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
+            });
+        }
+    };
 
-function showError() {
-    $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
+function showError(xhr, ajaxOptions, thrownError) {
+    switch (xhr.status) {
+        case 400:
+            //Хотел добавить анализ сообщения, но не смог...
+            $('#error_message').html("Выделенная область слишком большая");
+            break;
+        case 500: 
+            $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
+            break;
+        default:
+            $('#error_message').html("Произошла ошибка");
+    }
     $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
     $("#calculateBtn").prop('disabled', false);
     $('#loader').hide();
