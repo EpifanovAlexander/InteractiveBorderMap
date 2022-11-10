@@ -146,14 +146,19 @@ function drawObjectsFromPolygons(data, status) {
     });
 };
 
-function drawObjectsFromMarkers(data, status) {
-    $("#calculateBtn").prop('disabled', false);
-    $('#loader').hide();
-    var markers = JSON.parse(data);
-    markers.forEach(marker => {
-        newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
-    });
-};
+    function drawObjectsFromMarkers(data, status) {
+        $("#calculateBtn").prop('disabled', false);
+        $('#loader').hide();
+        var markers = JSON.parse(data);
+        if (markers.length === 0) {
+            $('#error_message').html("Нет данных о выделенной области");
+            $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
+        } else {
+            markers.forEach(marker => {
+                newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
+            });
+        }
+    };
 
 function showError() {
     $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
