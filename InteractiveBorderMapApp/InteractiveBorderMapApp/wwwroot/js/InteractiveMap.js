@@ -160,8 +160,18 @@ function drawObjectsFromPolygons(data, status) {
         }
     };
 
-function showError() {
-    $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
+function showError(xhr, ajaxOptions, thrownError) {
+    switch (xhr.status) {
+        case 400:
+            //Хотел добавить анализ сообщения, но не смог...
+            $('#error_message').html("Выделенная область слишком большая");
+            break;
+        case 500: 
+            $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
+            break;
+        default:
+            $('#error_message').html("Произошла ошибка");
+    }
     $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
     $("#calculateBtn").prop('disabled', false);
     $('#loader').hide();
