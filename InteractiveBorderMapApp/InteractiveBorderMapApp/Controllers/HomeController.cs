@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using InteractiveBorderMapApp.Entities;
 using InteractiveBorderMapApp.Models;
 using InteractiveBorderMapApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace InteractiveBorderMapApp.Controllers
 {
@@ -14,9 +16,11 @@ namespace InteractiveBorderMapApp.Controllers
     {
         private CoordinateService _coordinateService;
         private CriteriaService _criteriaService;
+        private ILogger _logger;
 
-        public HomeController(CoordinateService coordinateService, CriteriaService criteriaService)
+        public HomeController(CoordinateService coordinateService, CriteriaService criteriaService, ILogger<HomeController> logger)
         {
+            _logger = logger;
             _coordinateService = coordinateService;
             _criteriaService = criteriaService;
         }
@@ -31,6 +35,7 @@ namespace InteractiveBorderMapApp.Controllers
         {
             using var reader = new StreamReader(Request.Body);
             var content = await reader.ReadToEndAsync();
+            _logger.Log(LogLevel.Information, DateTime.Now + ": " + content);
             var coordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
 
             IEnumerable<OsmBuilding> list = _coordinateService.getBuildingsAsync(coordinates).Result;

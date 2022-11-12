@@ -98,7 +98,7 @@ L.drawLocal.edit.handlers.remove.tooltip.text = 'Кликните на объе�
 
 map.addControl(drawControl);
 
-
+$("#calculateBtn").prop('disabled', true);
 let markers = L.layerGroup().addTo(map);
 let polygons = [];
 
@@ -113,6 +113,7 @@ map.on('draw:created', function (e) {
     var layer = e.layer;
     polygons = layer._latlngs;
     drawnItems.addLayer(layer);
+    $("#calculateBtn").prop('disabled', false);
 });
 
 map.on('draw:drawstart', function (e) {
@@ -147,7 +148,6 @@ function drawObjectsFromPolygons(data, status) {
 };
 
     function drawObjectsFromMarkers(data, status) {
-        $("#calculateBtn").prop('disabled', false);
         $('#loader').hide();
         var markers = JSON.parse(data);
         if (markers.length === 0) {
@@ -173,7 +173,6 @@ function showError(xhr, ajaxOptions, thrownError) {
             $('#error_message').html("Произошла ошибка");
     }
     $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
-    $("#calculateBtn").prop('disabled', false);
     $('#loader').hide();
 };
 
