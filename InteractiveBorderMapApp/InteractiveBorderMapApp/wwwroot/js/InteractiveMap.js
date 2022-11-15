@@ -2,7 +2,7 @@ var mapOptions = {
     zoomControl: false
 }
 
-var map = L.map('map', mapOptions).setView([55.75358828417404, 37.619384763529524], 14);
+var map = L.map('map', mapOptions).setView([55.804304691435007, 37.606936030030255], 14);
 mapLink = 
     '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 L.tileLayer(
@@ -101,6 +101,7 @@ map.addControl(drawControl);
 $("#calculateBtn").prop('disabled', true);
 let markers = L.layerGroup().addTo(map);
 let polygons = [];
+let reportId = "";
 
 map.on('draw:edited', function (e) {
     var layers = e.layers;
@@ -149,7 +150,8 @@ function drawObjectsFromPolygons(data, status) {
 
     function drawObjectsFromMarkers(data, status) {
         $('#loader').hide();
-        var markers = JSON.parse(data);
+        var response = JSON.parse(data);
+        var markers = response.markers;
         if (markers.length === 0) {
             $('#error_message').html("Нет данных о выделенной области");
             $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
@@ -157,10 +159,14 @@ function drawObjectsFromPolygons(data, status) {
             markers.forEach(marker => {
                 newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
             });
+            reportId = response.reportId;
+            $("#loadReportBtn").prop('disabled', false);
         }
     };
 
 function showError(xhr, ajaxOptions, thrownError) {
+    reportId = "";
+    $("#loadReportBtn").prop('disabled', true);
     switch (xhr.status) {
         case 400:
             //Хотел добавить анализ сообщения, но не смог...
@@ -187,6 +193,13 @@ $("#submitForm").submit(function () {
         error: showError
     });
     $("#calculateBtn").prop('disabled', true);
+    $("#loadReportBtn").prop('disabled', true);
+    reportId = "";
     $('#loader').show();
     return false;
+});
+
+$('#loadReportBtn').click(function (e) {
+    e.preventDefault();
+    location.href = '/Home/DownloadReport/' + reportId;
 });
