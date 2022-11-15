@@ -28,6 +28,7 @@ namespace InteractiveBorderMapApp
             services.AddScoped<Parser>();
             services.AddScoped<CoordinateService>();
             services.AddScoped<CriteriaService>();
+            services.AddScoped<ReportService>();
 
             services.Configure<IISServerOptions>(options =>
             {
