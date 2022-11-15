@@ -132,7 +132,7 @@ function refreshMap() {
 
 function newMarker(lat, lng, title, type) {
     let marker = new L.Marker([lat, lng]);
-    marker.setIcon(L.icon({ iconUrl: "/img/" + type + ".png", iconSize: [40, 60] }));
+    marker.setIcon(L.icon({ iconUrl: "/img/" + type + ".png", iconSize: [40, 60], iconAnchor: [20, 60] }));
     marker.bindPopup(title).openPopup();
     marker.addTo(markers);
 }
@@ -170,7 +170,7 @@ function showError(xhr, ajaxOptions, thrownError) {
             $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
             break;
         default:
-            $('#error_message').html("Произошла ошибка");
+            $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
     }
     $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
     $('#loader').hide();
