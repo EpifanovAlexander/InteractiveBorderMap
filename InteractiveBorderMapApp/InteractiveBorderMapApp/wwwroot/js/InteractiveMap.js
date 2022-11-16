@@ -145,27 +145,6 @@ function newMarker(lat, lng, title, type) {
     marker.addTo(markers);
 }
 
-function drawArea(lat, lng, areaColor) {
-    let coords = [];
-    let lat1 = lat - 0.0001;
-    let lng1 = lng - 0.0001;
-    coords.push([ lat1, lng1 ]);
-    lat1 = lat - 0.0001;
-    lng1 = lng + 0.0001;
-    coords.push([lat1, lng1]);
-    lat1 = lat + 0.0001;
-    lng1 = lng + 0.0001;
-    coords.push([lat1, lng1]);
-    lat1 = lat + 0.0001;
-    lng1 = lng - 0.0001;
-    coords.push([lat1, lng1]);
-    lat1 = lat - 0.0001;
-    lng1 = lng - 0.0001;
-    coords.push([lat1, lng1]);
-
-    L.polygon([coords], { color: areaColor }).addTo(drawnItems);
-};
-
 function drawObjectsFromPolygons(data, status) {
     var objects = JSON.parse(data);
     objects.forEach(coords => {
@@ -183,8 +162,7 @@ function drawObjectsFromPolygons(data, status) {
         } else {
             markers.forEach(marker => {
                 newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
-                drawObjectsFromPolygons(marker["coordinates"], 0);
-                drawArea(marker["coordinate"]["lat"], marker["coordinate"]["lng"], colorDict[marker["type"]]);
+                L.polygon(marker["coordinates"], { color: colorDict[marker["type"]] }).addTo(drawnItems);
             });
             reportId = response.reportId;
             $("#loadReportBtn").prop('disabled', false);

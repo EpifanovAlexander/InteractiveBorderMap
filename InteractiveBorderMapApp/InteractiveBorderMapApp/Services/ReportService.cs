@@ -18,7 +18,7 @@ namespace InteractiveBorderMapApp.Services
 
         public string CreateBuildReport(List<Building> buildings)
         {
-            string nowTime = Convert.ToString(DateTime.Now.Ticks); // номер отчета
+             string nowTime = Convert.ToString(DateTime.Now.Ticks); // номер отчета
 
             // путь к документу
             string reportName = nowTime + "_BuildReport.docx";
@@ -33,29 +33,38 @@ namespace InteractiveBorderMapApp.Services
                 Table tableInWord = toCreateTableInWord.StartTable();
 
                 //--------------------------------------------------------
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("№");
+                if (buildings[i].Number != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("№");
 
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write(buildings[i].Number);
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(buildings[i].Number);
 
-                toCreateTableInWord.EndRow();
+                    toCreateTableInWord.EndRow();
+                }
                 //--------------------------------------------------------
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("Адрес");
+                if (buildings[i].Address != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("Адрес");
 
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write(buildings[i].Address);
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(buildings[i].Address);
 
-                toCreateTableInWord.EndRow();
+                    toCreateTableInWord.EndRow();
+                }
                 //--------------------------------------------------------
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("Район");
+                if (buildings[i].Area != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("Район");
 
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write(buildings[i].Area.ToString());
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(buildings[i].Area.ToString());
 
-                toCreateTableInWord.EndRow();
+                    toCreateTableInWord.EndRow();
+                }
                 //--------------------------------------------------------
                 toCreateTableInWord.InsertCell();
                 toCreateTableInWord.Write("Жилое");
@@ -65,13 +74,16 @@ namespace InteractiveBorderMapApp.Services
 
                 toCreateTableInWord.EndRow();
                 //--------------------------------------------------------
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("Год");
+                if (buildings[i].Year != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("Год");
 
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write(buildings[i].Year);
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(buildings[i].Year);
 
-                toCreateTableInWord.EndRow();
+                    toCreateTableInWord.EndRow();
+                }
                 //--------------------------------------------------------
                 toCreateTableInWord.InsertCell();
                 toCreateTableInWord.Write("Аварийное");
@@ -81,13 +93,16 @@ namespace InteractiveBorderMapApp.Services
 
                 toCreateTableInWord.EndRow();
                 //--------------------------------------------------------
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("Материал");
+                if (buildings[i].Material != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("Материал");
 
-                toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write(buildings[i].Material);
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(buildings[i].Material);
 
-                toCreateTableInWord.EndRow();
+                    toCreateTableInWord.EndRow();
+                }
                 //--------------------------------------------------------
 
                 toCreateTableInWord.EndTable();
