@@ -48,13 +48,13 @@ namespace InteractiveBorderMapApp.Controllers
             _logger.Log(LogLevel.Information, DateTime.Now + ": " + content);
             var coordinates = JsonSerializer.Deserialize<IEnumerable<Coordinate>>(content);
 
-            IEnumerable<OsmBuilding> list = _coordinateService.getBuildingsAsync(coordinates).Result;
+            IEnumerable<Building> list = _coordinateService.getBuildingsAsync(coordinates).Result;
 
             var markers = new List<Marker>();
             foreach (var building in list)
             {
-                if(!markers.Any(m => m.Coordinate.Lat == building.Coordinate.Lat && m.Coordinate.Lng == building.Coordinate.Lng))
-                    markers.Add(new Marker(building.Coordinate, MarkerType.INCLUDE, building.Content));
+                if(!markers.Any(m => m.Coordinate.Lat == building.Center.Lat && m.Coordinate.Lng == building.Center.Lng))
+                    markers.Add(new Marker(building.Center, building.Coordinates.ToArray(), MarkerType.INCLUDE, building.ToString()));
             }
             if (markers.Count > 2)
             {

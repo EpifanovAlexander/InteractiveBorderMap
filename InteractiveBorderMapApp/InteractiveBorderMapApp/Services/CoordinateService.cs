@@ -14,8 +14,8 @@ namespace InteractiveBorderMapApp.Services
     {
         private const string OSM_URL = "https://api.openstreetmap.org/";
         private string _dbfPath = @"InteractiveBorderMapApp\Dataset\Организации СВАО_САО\Организации_СВАО_САО.dbf";
-        private string _shpPath = @"Dataset\Организации СВАО_САО\Организации_СВАО_САО.shp";
-        private string _excelPath = @"InteractiveBorderMapApp\Dataset\Здания СВАО_САО жилое_нежилое.xlsx";
+        private string _shpPath = @"Dataset\ОКС\ОКС.shp";
+        private string _excelPath = @"Dataset\Здания СВАО_САО жилое_нежилое.xlsx";
 
         private string _excelAreaPath =
             @"InteractiveBorderMapApp\Dataset\Аварийные_Самовольные_Несоответствие_ВРИ_СВАО_САО.XLSX";
@@ -28,7 +28,7 @@ namespace InteractiveBorderMapApp.Services
         }
 
 
-        public async Task<IEnumerable<OsmBuilding>> getBuildingsAsync(IEnumerable<Coordinate> area)
+        public async Task<IEnumerable<Building>> getBuildingsAsync(IEnumerable<Coordinate> area)
         {
             //Проверка размера области 
             var list = area.ToList();
@@ -37,9 +37,9 @@ namespace InteractiveBorderMapApp.Services
                 throw new ArgumentException("Square too big");
             }
 
-            var buildingsList = Parser.ParseShp(Path.GetFullPath(_shpPath)); //Получение зданий и участков
+            var buildingsList = Parser.ParseShp(Path.GetFullPath(_shpPath), Parser.ParseBuildingsExcel(Path.GetFullPath(_excelPath))); //Получение зданий и участков
 
-            return buildingsList.Where(x => isInArea(list, x.Coordinate));
+            return buildingsList.Where(x => isInArea(list, x.Center));
         }
 
         private bool isInArea(List<Coordinate> list, Coordinate dot)

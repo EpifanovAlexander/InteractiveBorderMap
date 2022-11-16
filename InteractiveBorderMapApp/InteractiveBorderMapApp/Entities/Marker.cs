@@ -6,6 +6,8 @@ namespace InteractiveBorderMapApp.Entities
     {
         [JsonPropertyName("coordinate")]
         public Coordinate Coordinate { get; set; }
+        [JsonPropertyName("coordinates")]
+        public Coordinate[] Coordinates { get; set; }
 
         [JsonPropertyName("type")]
         public string MarkerType { get; set; }
@@ -17,9 +19,10 @@ namespace InteractiveBorderMapApp.Entities
         {
         }
 
-        public Marker(Coordinate coordinate, string markerType, string text)
+        public Marker(Coordinate coordinate, Coordinate[] coordinates, string markerType, string text)
         {
             Coordinate = coordinate;
+            Coordinates = coordinates;
             MarkerType = markerType;
             Text = text;
         }

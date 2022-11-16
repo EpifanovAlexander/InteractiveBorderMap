@@ -167,9 +167,6 @@ function drawArea(lat, lng, areaColor) {
 };
 
 function drawObjectsFromPolygons(data, status) {
-    $("#calculateBtn").prop('disabled', false);
-    $('#loader').hide();
-    $("#result").text(data);
     var objects = JSON.parse(data);
     objects.forEach(coords => {
         L.polygon([coords], { color: 'green' }).addTo(drawnItems);
@@ -186,6 +183,7 @@ function drawObjectsFromPolygons(data, status) {
         } else {
             markers.forEach(marker => {
                 newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
+                drawObjectsFromPolygons(marker["coordinates"], 0);
                 drawArea(marker["coordinate"]["lat"], marker["coordinate"]["lng"], colorDict[marker["type"]]);
             });
             reportId = response.reportId;

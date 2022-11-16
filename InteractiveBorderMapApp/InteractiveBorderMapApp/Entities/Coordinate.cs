@@ -13,5 +13,11 @@ namespace InteractiveBorderMapApp.Entities
         public Coordinate()
         {
         }
+
+        public Coordinate(double lat, double lng)
+        {
+            Lat = lat;
+            Lng = lng;
+        }
     }
 }
