@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using InteractiveBorderMapApp.CustomExceptions;
 using InteractiveBorderMapApp.Entities;
+using InteractiveBorderMapApp.Repositories;
 
 namespace InteractiveBorderMapApp.Services
 {
@@ -14,17 +15,18 @@ namespace InteractiveBorderMapApp.Services
     {
         private const string OSM_URL = "https://api.openstreetmap.org/";
         private string _dbfPath = @"InteractiveBorderMapApp\Dataset\Организации СВАО_САО\Организации_СВАО_САО.dbf";
-        private string _shpPath = @"Dataset\ОКС\ОКС.shp";
-        private string _excelPath = @"Dataset\Здания СВАО_САО жилое_нежилое.xlsx";
+
 
         private string _excelAreaPath =
             @"InteractiveBorderMapApp\Dataset\Аварийные_Самовольные_Несоответствие_ВРИ_СВАО_САО.XLSX";
 
         private IHttpClientFactory _clientFactory;
+        private BuildingRepo _buildingRepo;
 
-        public CoordinateService(IHttpClientFactory clientFactory, Parser parser)
+        public CoordinateService(IHttpClientFactory clientFactory, Parser parser, BuildingRepo buildingRepo)
         {
             _clientFactory = clientFactory;
+            _buildingRepo = buildingRepo;
         }
 
 
@@ -37,7 +39,7 @@ namespace InteractiveBorderMapApp.Services
                 throw new ArgumentException("Square too big");
             }
 
-            var buildingsList = Parser.ParseShp(Path.GetFullPath(_shpPath), Parser.ParseBuildingsExcel(Path.GetFullPath(_excelPath))); //Получение зданий и участков
+            var buildingsList = _buildingRepo.Buildings; //Получение зданий и участков
 
             return buildingsList.Where(x => isInArea(list, x.Center));
         }

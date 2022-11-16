@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InteractiveBorderMapApp.Middleware;
+using InteractiveBorderMapApp.Repositories;
 using InteractiveBorderMapApp.Services;
 
 namespace InteractiveBorderMapApp
@@ -25,6 +26,7 @@ namespace InteractiveBorderMapApp
         {
             services.AddControllersWithViews();
             services.AddHttpClient();
+            services.AddSingleton<BuildingRepo>();
             services.AddScoped<Parser>();
             services.AddScoped<CoordinateService>();
             services.AddScoped<CriteriaService>();
