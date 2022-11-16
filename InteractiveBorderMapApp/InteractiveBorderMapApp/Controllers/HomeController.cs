@@ -54,7 +54,20 @@ namespace InteractiveBorderMapApp.Controllers
             {
                 markers.Add(new Marker(building.Coordinate, MarkerType.INCLUDE, building.Content));
             }
-            var reportId = "12.docx";
+
+            // Создаём лист со строениями для примера формирования отчёта
+            List<Building> buildings = new List<Building>();
+            Building build1 = new Building("11", "Пушкина", 1223, true, "1980", false, true, "Кирпичный");
+            Building build2 = new Building("22", "Ленина", 3221, false, "1981", true, true, "Монолитный");
+            Building build3 = new Building("33", "Есенина", 1133, true, "1982", false, true, "Панельный");
+            Building build4 = new Building("44", "Жукова", 2244, false, "1983", true, true, "Деревянный");
+
+            buildings.Add(build1);
+            buildings.Add(build2);
+            buildings.Add(build3);
+            buildings.Add(build4);
+
+            var reportId = _reportService.CreateBuildReport(buildings);
             var responseModel = new ResponseModel(markers, reportId);
 
             var newContent = JsonSerializer.Serialize(responseModel);
