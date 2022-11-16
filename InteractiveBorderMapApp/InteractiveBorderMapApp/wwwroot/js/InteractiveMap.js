@@ -103,6 +103,13 @@ let markers = L.layerGroup().addTo(map);
 let polygons = [];
 let reportId = "";
 
+var colorDict = {
+    "include": 'green',
+    "exclude": 'red',
+    "discuss": 'blue'
+};
+
+
 map.on('draw:edited', function (e) {
     var layers = e.layers;
     layers.eachLayer(function (layer) {
@@ -138,6 +145,27 @@ function newMarker(lat, lng, title, type) {
     marker.addTo(markers);
 }
 
+function drawArea(lat, lng, areaColor) {
+    let coords = [];
+    let lat1 = lat - 0.0001;
+    let lng1 = lng - 0.0001;
+    coords.push([ lat1, lng1 ]);
+    lat1 = lat - 0.0001;
+    lng1 = lng + 0.0001;
+    coords.push([lat1, lng1]);
+    lat1 = lat + 0.0001;
+    lng1 = lng + 0.0001;
+    coords.push([lat1, lng1]);
+    lat1 = lat + 0.0001;
+    lng1 = lng - 0.0001;
+    coords.push([lat1, lng1]);
+    lat1 = lat - 0.0001;
+    lng1 = lng - 0.0001;
+    coords.push([lat1, lng1]);
+
+    L.polygon([coords], { color: areaColor }).addTo(drawnItems);
+};
+
 function drawObjectsFromPolygons(data, status) {
     $("#calculateBtn").prop('disabled', false);
     $('#loader').hide();
@@ -158,6 +186,7 @@ function drawObjectsFromPolygons(data, status) {
         } else {
             markers.forEach(marker => {
                 newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
+                drawArea(marker["coordinate"]["lat"], marker["coordinate"]["lng"], colorDict[marker["type"]]);
             });
             reportId = response.reportId;
             $("#loadReportBtn").prop('disabled', false);
