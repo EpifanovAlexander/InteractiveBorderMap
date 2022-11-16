@@ -15,9 +15,26 @@
                         style="background-color: #525864; border: lightslategrey; box-shadow: 0px 1px 3px rgba(000, 000, 000, 1);
                         width: 100%; font-size: 10pt">
                     <img id="loader" src="/img/loading.gif" width="20" height="20" alt="Загрузка" style="display: none; margin-right: 10px;">
-                    Сформировать границу
+                    Сформировать границы
                 </button>
             </form>
+
+            <div style="margin-top: 10px; display: flex; background-color: #525864; border: lightslategrey; box-shadow: 0px 1px 3px rgba(000, 000, 000, 1); border-radius: 8px;">
+                    <button value="LoadReport" class="btn btn-primary btn-lg btn-block" id="loadReportBtn"
+                            style="background-color: #525864; border: lightslategrey; box-shadow: 0px 1px 3px rgba(000, 000, 000, 1);
+                            flex:4; font-size: 10pt;" disabled>
+                        Загрузить отчёт
+                    </button>
+
+                    <div class="dropdown">
+                      <img src="/img/docxIcon.png" width="38" height="38" alt=".docx" style="flex: 1; padding: 1px 1px">
+                      <div class="dropdown-content" style="border-radius: 8px;">
+                        <img src="/img/docxIcon.png" alt=".docx">
+                        <img src="/img/pdfIcon.png" alt=".pdf" style="padding: 6px 8px; padding-left: 6px">
+                        <img src="/img/pptxIcon.png" alt=".pptx"style="padding: 6px 4px; padding-left: 6px">
+                      </div>
+                    </div>   
+             </div>
 
         </div>
 

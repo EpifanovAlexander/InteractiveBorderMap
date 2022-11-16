@@ -2,7 +2,7 @@ var mapOptions = {
     zoomControl: false
 }
 
-var map = L.map('map', mapOptions).setView([55.75358828417404, 37.619384763529524], 14);
+var map = L.map('map', mapOptions).setView([55.804304691435007, 37.606936030030255], 14);
 mapLink = 
     '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 L.tileLayer(
@@ -98,9 +98,10 @@ L.drawLocal.edit.handlers.remove.tooltip.text = 'Кликните на объе�
 
 map.addControl(drawControl);
 
-
+$("#calculateBtn").prop('disabled', true);
 let markers = L.layerGroup().addTo(map);
 let polygons = [];
+let reportId = "";
 
 map.on('draw:edited', function (e) {
     var layers = e.layers;
@@ -113,6 +114,7 @@ map.on('draw:created', function (e) {
     var layer = e.layer;
     polygons = layer._latlngs;
     drawnItems.addLayer(layer);
+    $("#calculateBtn").prop('disabled', false);
 });
 
 map.on('draw:drawstart', function (e) {
@@ -131,7 +133,7 @@ function refreshMap() {
 
 function newMarker(lat, lng, title, type) {
     let marker = new L.Marker([lat, lng]);
-    marker.setIcon(L.icon({ iconUrl: "/img/" + type + ".png", iconSize: [40, 60] }));
+    marker.setIcon(L.icon({ iconUrl: "/img/" + type + ".png", iconSize: [40, 60], iconAnchor: [20, 60] }));
     marker.bindPopup(title).openPopup();
     marker.addTo(markers);
 }
@@ -147,9 +149,9 @@ function drawObjectsFromPolygons(data, status) {
 };
 
     function drawObjectsFromMarkers(data, status) {
-        $("#calculateBtn").prop('disabled', false);
         $('#loader').hide();
-        var markers = JSON.parse(data);
+        var response = JSON.parse(data);
+        var markers = response.markers;
         if (markers.length === 0) {
             $('#error_message').html("Нет данных о выделенной области");
             $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
@@ -157,10 +159,14 @@ function drawObjectsFromPolygons(data, status) {
             markers.forEach(marker => {
                 newMarker(marker["coordinate"]["lat"], marker["coordinate"]["lng"], marker["text"], marker["type"]);
             });
+            reportId = response.reportId;
+            $("#loadReportBtn").prop('disabled', false);
         }
     };
 
 function showError(xhr, ajaxOptions, thrownError) {
+    reportId = "";
+    $("#loadReportBtn").prop('disabled', true);
     switch (xhr.status) {
         case 400:
             //Хотел добавить анализ сообщения, но не смог...
@@ -170,10 +176,9 @@ function showError(xhr, ajaxOptions, thrownError) {
             $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
             break;
         default:
-            $('#error_message').html("Произошла ошибка");
+            $('#error_message').html("Произошла ошибка сервера (500). Попробуйте запустить расчёт позднее.");
     }
     $("#error_box").fadeIn(500).delay(3000).fadeOut(500);
-    $("#calculateBtn").prop('disabled', false);
     $('#loader').hide();
 };
 
@@ -188,6 +193,13 @@ $("#submitForm").submit(function () {
         error: showError
     });
     $("#calculateBtn").prop('disabled', true);
+    $("#loadReportBtn").prop('disabled', true);
+    reportId = "";
     $('#loader').show();
     return false;
+});
+
+$('#loadReportBtn').click(function (e) {
+    e.preventDefault();
+    location.href = '/Home/DownloadReport/' + reportId;
 });

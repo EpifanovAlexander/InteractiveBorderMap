@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Dataset" />
-    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\reports\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.Words" Version="22.11.0" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
     <PackageReference Include="EPPlus" Version="6.1.0" />
+    <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="NetTopologySuite" Version="2.5.0" />
     <PackageReference Include="NetTopologySuite.Features" Version="2.1.0" />
