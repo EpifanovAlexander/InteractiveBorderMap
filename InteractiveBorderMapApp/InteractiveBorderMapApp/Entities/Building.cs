@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using InteractiveBorderMapApp.Entities;
 
 public class Building
@@ -12,8 +13,8 @@ public class Building
     public bool IsType;
     public string Material;
 
-    public List<Coordinate> Coordinates;
-    public Coordinate Center;
+    public List<Coordinate> Coordinates { get; set; }
+    public Coordinate Center { get; set; }
 
     public Building(string number, string address, double area, bool isLiving, string year, bool isEmergency,
         bool isType, string material)
