@@ -42,7 +42,7 @@ namespace InteractiveBorderMapApp.Services
                 toCreateTableInWord.EndRow();
                 //--------------------------------------------------------
                 toCreateTableInWord.InsertCell();
-                toCreateTableInWord.Write("Адерс");
+                toCreateTableInWord.Write("Адрес");
 
                 toCreateTableInWord.InsertCell();
                 toCreateTableInWord.Write(buildings[i].Address);
