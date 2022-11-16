@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using InteractiveBorderMapApp.Entities;
@@ -52,7 +53,13 @@ namespace InteractiveBorderMapApp.Controllers
             var markers = new List<Marker>();
             foreach (var building in list)
             {
-                markers.Add(new Marker(building.Coordinate, MarkerType.INCLUDE, building.Content));
+                if(!markers.Any(m => m.Coordinate.Lat == building.Coordinate.Lat && m.Coordinate.Lng == building.Coordinate.Lng))
+                    markers.Add(new Marker(building.Coordinate, MarkerType.INCLUDE, building.Content));
+            }
+            if (markers.Count > 2)
+            {
+                markers[0].MarkerType = MarkerType.EXCLUDE;
+                markers[1].MarkerType = MarkerType.DISCUSS;
             }
 
             // Создаём лист со строениями для примера формирования отчёта
