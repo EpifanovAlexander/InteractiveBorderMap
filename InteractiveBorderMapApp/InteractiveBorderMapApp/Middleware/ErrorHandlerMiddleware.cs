@@ -26,13 +26,13 @@ namespace InteractiveBorderMapApp.Middleware
             }
             catch (AggregateException exception)
             {
-                _logger.Log(LogLevel.Error, DateTime.Now + ": " + exception.Message);
+                _logger.Log(LogLevel.Error, DateTime.Now + ": " + exception.StackTrace);
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await context.Response.WriteAsync(JsonSerializer.Serialize(exception.Message));
             }
             catch (Exception exception)
             {
-                _logger.Log(LogLevel.Error, DateTime.Now + ": " + exception.Message);
+                _logger.Log(LogLevel.Error, DateTime.Now + ": " + exception.StackTrace);
             }
         }
     }

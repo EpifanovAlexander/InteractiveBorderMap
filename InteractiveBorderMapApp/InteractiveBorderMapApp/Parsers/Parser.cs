@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using DotSpatial.Projections;
 using InteractiveBorderMapApp.Entities;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.IO.Esri.Dbf;
@@ -11,30 +13,22 @@ namespace InteractiveBorderMapApp
 {
     public class Parser
     {
-        public static List<OsmBuilding> ParseShp(string shpPath)
+        public static List<Building> ParseShp(string shpPath, Dictionary<string, Building> buildings)
         {
-            var list = new List<OsmBuilding>();
             foreach (var feature in Shapefile.ReadAllFeatures(shpPath))
             {
-                var building = new OsmBuilding();
-                foreach (var attrName in feature.Attributes.GetNames())
-                    building.Content += attrName;
-                //     Console.WriteLine($"{attrName,10}: {feature.Attributes[attrName]}");
-                // Console.WriteLine($"     SHAPE:");
-
                 foreach (var geometry in feature.Geometry.Coordinates)
                 {
-                    building.Coordinate.Lat = ReprojectFromMsk77(geometry)[1];
-                    building.Coordinate.Lng = ReprojectFromMsk77(geometry)[0];
+                    buildings[feature.Attributes["cadnum"].ToString()].Coordinates
+                        .Add(new Entities.Coordinate(ReprojectFromMsk77(geometry)[1], ReprojectFromMsk77(geometry)[0]));
                 }
-                list.Add(building);
+                buildings[feature.Attributes["cadnum"].ToString()].CalcCenter();
             }
-
-            return list;
+            return buildings.Values.ToList();
         }
 
 
-        public static void ParseDbf(string dbfPath)
+        public static void ParseBuildingFromDbfAndShp(string dbfPath)
         {
             using (var dbf = new DbfReader(dbfPath))
             {
@@ -51,10 +45,10 @@ namespace InteractiveBorderMapApp
             }
         }
 
-        public static List<Building> ParseBuildingsExcel(string excelPath)
+        public static Dictionary<string, Building> ParseBuildingsExcel(string excelPath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            List<Building> result = new List<Building>();
+            Dictionary<string, Building> result = new Dictionary<string, Building>();
             using (var package = new ExcelPackage(new FileInfo(excelPath)))
             {
                 var worksheet = package.Workbook.Worksheets[0];
@@ -69,7 +63,13 @@ namespace InteractiveBorderMapApp
                     var material = worksheet.Cells[row, 6].Value?.ToString().Trim();
                     var emerg = worksheet.Cells[row, 7].Value?.ToString().Trim() == "Да" ? true : false;
                     var type = worksheet.Cells[row, 7].Value?.ToString().Trim() == "Да" ? true : false;
-                    result.Add(new Building(num, address, area, living, year, emerg, type, material));
+                    try
+                    {
+                        result.Add(num, new Building(num, address, area, living, year, emerg, type, material));
+                    }
+                    catch (Exception exception)
+                    {
+                    }
                 }
             }
 
@@ -107,13 +107,13 @@ namespace InteractiveBorderMapApp
                 "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ";
 
             var src =
-                DotSpatial.Projections.ProjectionInfo.FromProj4String(proj4_msk77);
+                ProjectionInfo.FromProj4String(proj4_msk77);
             var dest =
-                DotSpatial.Projections.ProjectionInfo.FromProj4String(proj4_new);
+                ProjectionInfo.FromProj4String(proj4_new);
 
             double[] xy = new[] { coordinate.X, coordinate.Y };
 
-            DotSpatial.Projections.Reproject.ReprojectPoints(xy, new[] { 0.0d }, src, dest, 0, 1);
+            Reproject.ReprojectPoints(xy, new[] { 0.0d }, src, dest, 0, 1);
             return xy;
         }
     }
