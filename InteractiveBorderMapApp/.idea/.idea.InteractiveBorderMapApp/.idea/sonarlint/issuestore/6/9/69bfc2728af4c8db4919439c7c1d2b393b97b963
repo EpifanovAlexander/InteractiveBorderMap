@@ -1,0 +1,5 @@
+
+=csharpsquid:S2933"Make '_shpPath' 'readonly'.(Ú–¸´þÿÿÿÿ
+:csharpsquid:S2933	"Make '_excelPath' 'readonly'.(ˆ¨ö¾
+ˆcsharpsquid:S3887
+"fUse an immutable collection or reduce the accessibility of the non-private readonly field 'Buildings'.(“ûÙ°øÿÿÿÿ

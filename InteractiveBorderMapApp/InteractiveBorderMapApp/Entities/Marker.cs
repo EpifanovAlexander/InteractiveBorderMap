@@ -14,17 +14,22 @@ namespace InteractiveBorderMapApp.Entities
 
         [JsonPropertyName("text")]
         public string Text { get; set; }
+        
+        [JsonPropertyName("showMarker")]
+        public bool isShowMarker { get; set; }
 
-        public Marker()
+        public Marker(bool isShowMarker)
         {
+            this.isShowMarker = isShowMarker;
         }
 
-        public Marker(Coordinate coordinate, Coordinate[] coordinates, string markerType, string text)
+        public Marker(Coordinate coordinate, Coordinate[] coordinates, string markerType, string text, bool isShowMarker)
         {
             Coordinate = coordinate;
             Coordinates = coordinates;
             MarkerType = markerType;
             Text = text;
+            this.isShowMarker = isShowMarker;
         }
     }
 }

@@ -26,6 +26,7 @@ namespace InteractiveBorderMapApp
         {
             services.AddControllersWithViews();
             services.AddHttpClient();
+            services.AddSingleton<AreaRepo>();
             services.AddSingleton<BuildingRepo>();
             services.AddScoped<Parser>();
             services.AddScoped<CoordinateService>();

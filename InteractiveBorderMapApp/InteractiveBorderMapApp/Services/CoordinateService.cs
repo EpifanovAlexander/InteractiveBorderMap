@@ -22,11 +22,13 @@ namespace InteractiveBorderMapApp.Services
 
         private IHttpClientFactory _clientFactory;
         private BuildingRepo _buildingRepo;
+        private AreaRepo _areaRepo;
 
-        public CoordinateService(IHttpClientFactory clientFactory, Parser parser, BuildingRepo buildingRepo)
+        public CoordinateService(IHttpClientFactory clientFactory, Parser parser, BuildingRepo buildingRepo, AreaRepo areaRepo)
         {
             _clientFactory = clientFactory;
             _buildingRepo = buildingRepo;
+            _areaRepo = areaRepo;
         }
 
 
@@ -39,9 +41,19 @@ namespace InteractiveBorderMapApp.Services
                 throw new ArgumentException("Square too big");
             }
 
-            var buildingsList = _buildingRepo.Buildings; //Получение зданий и участков
-
+            var buildingsList = _buildingRepo.Buildings; //Получение зданий
             return buildingsList.Where(x => isInArea(list, x.Center));
+        }
+
+        public async Task<IEnumerable<Area>> getAreasAsync(IEnumerable<Coordinate> area)
+        {
+            var list = area.ToList();
+            if (CalcSquare(list) > 0.002d)
+            {
+                throw new ArgumentException("Square too big");
+            }
+            var areaList = _areaRepo.Areas; //Получение участков
+            return areaList.Where(x => isInArea(list, x.Center));
         }
 
         private bool isInArea(List<Coordinate> list, Coordinate dot)

@@ -40,6 +40,7 @@ public class Building
             sumX += coordinate.Lat;
             sumY += coordinate.Lng;
         }
+
         Center = new Coordinate(sumX / Coordinates.Count, sumY / Coordinates.Count);
     }
 

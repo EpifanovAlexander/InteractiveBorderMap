@@ -26,6 +26,38 @@ namespace InteractiveBorderMapApp
             }
             return buildings.Values.ToList();
         }
+        
+        public static List<Area> ParseAreasShp(string shpPath)
+        {
+            List<Area> areas = new List<Area>();
+            try
+            {
+
+
+                foreach (var feature in Shapefile.ReadAllFeatures(shpPath))
+                {
+                    Area area = new Area();
+                    area.Number = feature.Attributes["DESCR"].ToString();
+                    area.Property = Int32.Parse(feature.Attributes["PROPERTY_T"].ToString());
+                    foreach (var geometry in feature.Geometry.Coordinates)
+                    {
+                        area.Coordinates.Add(new Entities.Coordinate(ReprojectFromMsk77(geometry)[1],
+                            ReprojectFromMsk77(geometry)[0]));
+                    }
+
+                    area.CalcCenter();
+                    areas.Add(area);
+
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+
+            return areas;
+        }
+
 
 
         public static void ParseBuildingFromDbfAndShp(string dbfPath)
@@ -76,15 +108,15 @@ namespace InteractiveBorderMapApp
             return result;
         }
 
-        public static List<Area> ParseAreasExcel(string excelPath)
+        public static Dictionary<string, Area> ParseAreasExcel(string excelPath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            List<Area> result = new List<Area>();
+            Dictionary<string, Area> result = new Dictionary<string, Area>();
             using (var package = new ExcelPackage(new FileInfo(excelPath)))
             {
                 var worksheet = package.Workbook.Worksheets[0];
                 int rowCount = worksheet.Dimension.End.Row; //get row count
-                for (int row = 2; row <= rowCount; row++)
+                for (int row = 2; row <= 4912; row++)
                 {
                     var dist = worksheet.Cells[row, 1].Value?.ToString().Trim();
                     var num = worksheet.Cells[row, 2].Value?.ToString().Trim();
@@ -92,7 +124,14 @@ namespace InteractiveBorderMapApp
                     var VRI = worksheet.Cells[row, 4].Value?.ToString().Trim() == "Да" ? true : false;
                     var emerg = worksheet.Cells[row, 5].Value?.ToString().Trim() == "Да" ? true : false;
 
-                    result.Add(new Area(dist, num, custom, VRI, emerg));
+                    try
+                    {
+                        result.Add(num, new Area(dist, num, custom, VRI, emerg));
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
                 }
             }
 

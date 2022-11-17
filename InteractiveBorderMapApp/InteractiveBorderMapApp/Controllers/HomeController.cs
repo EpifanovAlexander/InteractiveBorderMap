@@ -54,12 +54,19 @@ namespace InteractiveBorderMapApp.Controllers
             foreach (var building in list)
             {
                 if(!markers.Any(m => m.Coordinate.Lat == building.Center.Lat && m.Coordinate.Lng == building.Center.Lng))
-                    markers.Add(new Marker(building.Center, building.Coordinates.ToArray(), MarkerType.INCLUDE, building.ToString()));
+                    markers.Add(new Marker(building.Center, building.Coordinates.ToArray(), MarkerType.INCLUDE, building.ToString(), true));
             }
             if (markers.Count > 2)
             {
                 markers[0].MarkerType = MarkerType.EXCLUDE;
                 markers[1].MarkerType = MarkerType.DISCUSS;
+            }
+
+            IEnumerable<Area> areaList = _coordinateService.getAreasAsync(coordinates).Result;
+            foreach (var area in areaList)
+            {
+                if(!markers.Any(m => m.Coordinate.Lat == area.Center.Lat && m.Coordinate.Lng == area.Center.Lng))
+                    markers.Add(new Marker(area.Center, area.Coordinates.ToArray(), MarkerType.INCLUDE, area.ToString(), false));
             }
 
             // Создаём лист со строениями для примера формирования отчёта
