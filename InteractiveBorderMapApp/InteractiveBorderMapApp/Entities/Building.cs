@@ -45,6 +45,6 @@ public class Building
 
     public override string ToString()
     {
-        return $"{nameof(Address)}: {Address}";
+        return $"Адрес: {Address}; Кадастровый номер: {Number}; Год постройки: {Year}; Материал: {Material}";
     }
 }

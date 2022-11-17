@@ -24,7 +24,7 @@ namespace InteractiveBorderMapApp.Controllers
 
         public static string WebRootPath { get; private set; }
 
-        public HomeController(CoordinateService coordinateService, CriteriaService criteriaService, 
+        public HomeController(CoordinateService coordinateService, CriteriaService criteriaService,
             ReportService reportService, ILogger<HomeController> logger, IWebHostEnvironment appEnvironment)
         {
             _logger = logger;
@@ -53,9 +53,13 @@ namespace InteractiveBorderMapApp.Controllers
             var markers = new List<Marker>();
             foreach (var building in list)
             {
-                if(!markers.Any(m => m.Coordinate.Lat == building.Center.Lat && m.Coordinate.Lng == building.Center.Lng))
-                    markers.Add(new Marker(building.Center, building.Coordinates.ToArray(), MarkerType.INCLUDE, building.ToString()));
+                var osm = new OsmBuilding(_criteriaService, building);
+                if (!markers.Any(
+                        m => m.Coordinate.Lat == building.Center.Lat && m.Coordinate.Lng == building.Center.Lng))
+                    markers.Add(new Marker(osm.Center, osm.Coordinates.ToArray(), osm.Marker,
+                        osm.Solution + osm.Content + osm.Building));
             }
+            /*
             if (markers.Count > 2)
             {
                 markers[0].MarkerType = MarkerType.EXCLUDE;
@@ -72,7 +76,7 @@ namespace InteractiveBorderMapApp.Controllers
             //buildings.Add(build1);
             //buildings.Add(build2);
             //buildings.Add(build3);
-            //buildings.Add(build4);
+            //buildings.Add(build4);*/
 
             var reportId = _reportService.CreateBuildReport(list.ToList());
             var responseModel = new ResponseModel(markers, reportId);
