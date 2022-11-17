@@ -4,12 +4,20 @@ using System.Collections.Generic;
 using System.IO;
 using Aspose.Words;
 using Aspose.Words.Tables;
+using InteractiveBorderMapApp.Entities;
 
 namespace InteractiveBorderMapApp.Services
 {
     public class ReportService
     {
         private string webRootPath = HomeController.WebRootPath;
+        private CriteriaService _criteriaService;
+
+        public ReportService(CriteriaService criteriaService)
+        {
+            _criteriaService = criteriaService;
+        }
+        
         public FileStream GetReport(string reportId)
         {
             var path = Path.Combine(webRootPath, @$"reports/{reportId}");
@@ -100,6 +108,17 @@ namespace InteractiveBorderMapApp.Services
 
                     toCreateTableInWord.InsertCell();
                     toCreateTableInWord.Write(buildings[i].Material);
+
+                    toCreateTableInWord.EndRow();
+                }
+                //--------------------------------------------------------
+                if (buildings[i].Address != null)
+                {
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write("Рекомендация");
+
+                    toCreateTableInWord.InsertCell();
+                    toCreateTableInWord.Write(new OsmBuilding(_criteriaService, buildings[i]).Solution);
 
                     toCreateTableInWord.EndRow();
                 }
